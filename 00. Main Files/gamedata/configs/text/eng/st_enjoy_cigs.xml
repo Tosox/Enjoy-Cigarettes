@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<string_table>
+	<string id="st_enjoy_cigs">
+		<text>enjoy cigarette</text>
+	</string>
+	<string id="st_itm_alt">
+		<text>Fake item</text>
+	</string>
+	<string id="st_itm_alt_descr">
+		<text>Nothing to see here. Move on.\n \n</text>
+	</string>
+</string_table>

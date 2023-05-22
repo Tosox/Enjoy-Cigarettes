@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<string_table>
+	<string id="ui_mcm_menu_enjoy_cigs">
+		<text>Enjoy Cigarettes</text>
+	</string>
+	<string id="ui_mcm_enjoy_cigs_title">
+		<text>Enjoy Cigarettes</text>
+	</string>
+	<string id="ui_mcm_enjoy_cigs_quickslot_bind">
+		<text>Включить клавиша модификатора для быстрых слотах</text>
+	</string>
+	<string id="ui_mcm_enjoy_cigs_quickslot_bind_desc">
+		<text>Включить наслаждаться сигареты для сигареты в быстрых слотах нажав клавишу модификатора вместе с клавишей якоря квикслота</text>
+	</string>
+	<string id="ui_mcm_enjoy_cigs_modifier">
+		<text>Клавиша модификатора</text>
+	</string>
+	
+	<string id="ui_mcm_lst_kb_mod_none">
+		<text>Без модификатора</text>
+	</string>
+	<string id="ui_mcm_lst_kb_mod_ctrl">
+		<text>Ctrl</text>
+	</string>
+	<string id="ui_mcm_lst_kb_mod_shift">
+		<text>Shift</text>
+	</string>
+	<string id="ui_mcm_lst_kb_mod_alt">
+		<text>Alt</text>
+	</string>
+</string_table>

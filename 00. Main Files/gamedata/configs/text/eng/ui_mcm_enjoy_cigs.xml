@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<string_table>
+	<string id="ui_mcm_menu_enjoy_cigs">
+		<text>Enjoy Cigarettes</text>
+	</string>
+	<string id="ui_mcm_enjoy_cigs_title">
+		<text>Enjoy Cigarettes</text>
+	</string>
+	<string id="ui_mcm_enjoy_cigs_quickslot_bind">
+		<text>Enable quickslot modifier key</text>
+	</string>
+	<string id="ui_mcm_enjoy_cigs_quickslot_bind_desc">
+		<text>Enable enjoying cigarettes for cigarettes in quickslots when pressing the modifier key along with the quickslot bind key</text>
+	</string>
+	<string id="ui_mcm_enjoy_cigs_modifier">
+		<text>Modifier key</text>
+	</string>
+	
+	<string id="ui_mcm_lst_kb_mod_none">
+		<text>No modifier</text>
+	</string>
+	<string id="ui_mcm_lst_kb_mod_ctrl">
+		<text>Ctrl</text>
+	</string>
+	<string id="ui_mcm_lst_kb_mod_shift">
+		<text>Shift</text>
+	</string>
+	<string id="ui_mcm_lst_kb_mod_alt">
+		<text>Alt</text>
+	</string>
+</string_table>

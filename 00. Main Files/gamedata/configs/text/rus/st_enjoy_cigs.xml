@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<string_table>
+	<string id="st_enjoy_cigs">
+		<text>наслаждать сигарета</text>
+	</string>
+	<string id="st_itm_alt">
+		<text>Фальшивая предмет</text>
+	</string>
+	<string id="st_itm_alt_descr">
+		<text>Здесь не на что смотреть. Иди дальше.\n \n</text>
+	</string>
+</string_table>

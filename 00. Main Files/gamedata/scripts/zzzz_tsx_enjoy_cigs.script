@@ -1,0 +1,72 @@
+local cigs_ini = ini_file("items\\settings\\enjoy_cigs_cfg.ltx")
+local is_enjoying = false
+
+function IsCig(obj)
+    return obj and cigs_ini:r_bool_ex("cigs", obj:section())
+end
+
+function functor_check(obj, bag, mode)
+    return IsCig(obj) and string.match(mode, "inventory") and string.match(bag, "actor_bag")
+end
+
+function functor_string(obj, bag, mode)
+    return "st_enjoy_cigs"
+end
+
+local orig_ciga_start = ciga_effects.ciga_start
+function ciga_effects.ciga_start(used_item)
+    if is_enjoying then
+        orig_ciga_effects.ciga_start(used_item)
+        is_enjoying = false
+        return
+    end
+    orig_ciga_start(used_item)
+end
+
+local orig_backpack_close = zzz_ea_addon_backpack.backpack_close
+function zzz_ea_addon_backpack.backpack_close()
+    if is_enjoying then return end
+    orig_backpack_close()
+end
+
+function functor_action(obj, bag, mode)
+    is_enjoying = true
+
+    hide_hud_inventory()
+
+    -- Check if actor has matches
+    local req_tool = ini_sys:r_string_ex(obj:section(), "required_tool")
+    local inv_matches = db.actor:object(req_tool)
+    if not inv_matches then
+        is_enjoying = false
+        local tool_str = game.translate_string("st_itm_manager_missing_requirements")
+        local matches_str = ui_item.get_sec_name(req_tool)
+        local error_str = strformat(tool_str, matches_str)
+        actor_menu.set_msg(1, error_str, 3)
+        return
+    end
+
+    -- Remove one match
+    utils_item.discharge(inv_matches)
+
+    -- Create fake object
+    local fake_item = obj:section() .. "_alt"
+    alife_create_item(fake_item, db.actor)
+
+    local function delayed_item_usage()
+        -- Remove one use from the original item
+        utils_item.discharge(obj)
+
+        -- Item animation
+        local inv_fake_item = db.actor:object(fake_item)
+        enhanced_animations.use_item(inv_fake_item)
+
+        return true
+    end
+
+    CreateTimeEvent("use_alt_cig", "use_alt_cig", 0.25, delayed_item_usage)
+end
+
+function on_game_start()
+    custom_functor_autoinject.add_functor("enjoy_cigs", functor_check, functor_string, nil, functor_action, true)
+end
