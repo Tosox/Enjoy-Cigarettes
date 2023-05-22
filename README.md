@@ -19,8 +19,8 @@ This addon makes it possible to play the longer, original [FDDA](https://www.mod
 
 ## Preview
 
-<img src="readme-res/enjoy.jpg" alt="inv_preview" width="700" height="500"/>
+<img src="readme-res/enjoy.jpg" alt="inv_preview" width="700"/>
 
 <br/>
 
-[<img src="readme-res/yt-thumbnail.jpg" alt="vid_preview" width="700" height="500"/>](https://www.youtube.com/watch?v=UFCezDngGcs)
+[<img src="readme-res/yt-thumbnail.jpg" alt="vid_preview" width="700"/>](https://www.youtube.com/watch?v=UFCezDngGcs)
