@@ -1,12 +1,17 @@
 local cigs_ini = ini_file("items\\settings\\enjoy_cigs_cfg.ltx")
+local ini_eff = ini_file("items\\items\\animations_settings.ltx")
 is_enjoying = false
 
 function is_cigarette(obj)
     return obj and cigs_ini:r_bool_ex("cigs", obj:section())
 end
 
+function has_asnens_long_anim()
+    return ini_eff:r_string_ex("cigar1_alt", "cam") == "itemuse_anm_effects\\cig_pack_asnen_long.anm"
+end
+
 function is_valid_cigarette(obj, bag, mode)
-    return is_cigarette(obj) and string.match(mode, "inventory") and string.match(bag, "actor_bag")
+    return is_cigarette(obj) and (mode == "inventory") and (bag == "actor_bag")
 end
 
 function get_functor_name(obj, bag, mode)

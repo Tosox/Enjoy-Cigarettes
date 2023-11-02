@@ -1,12 +1,8 @@
 local orig_ciga_start = ciga_effects.ciga_start
 function ciga_effects.ciga_start(used_item)
-    if tsx_enjoy_cigs.is_enjoying then
-        -- Use different smoke particle times and reset is_enjoying
-        orig_ciga_effects.ciga_start(used_item)
-        tsx_enjoy_cigs.is_enjoying = false
-        return
-    end
+    -- Reset is_enjoying
     orig_ciga_start(used_item)
+    tsx_enjoy_cigs.is_enjoying = false
 end
 
 local orig_backpack_close = zzz_ea_addon_backpack.backpack_close
@@ -14,4 +10,21 @@ function zzz_ea_addon_backpack.backpack_close()
     if not tsx_enjoy_cigs.is_enjoying then
         orig_backpack_close()
     end
+end
+
+local orig_create_time_event = _G.CreateTimeEvent
+function _G.CreateTimeEvent(ev_id, act_id, timer, f, ...)
+    if (not tsx_enjoy_cigs.is_enjoying) or (tsx_enjoy_cigs.has_asnens_long_anim()) then
+        orig_create_time_event(ev_id, act_id, timer, f, ...)
+        return
+    end
+
+    local new_timer = timer
+    if (ev_id == "ea_cig_light") and (act_id == "ea_cig_light") then
+        new_timer = 6
+    elseif (ev_id == "ea_cig_light2") and (act_id == "ea_cig_light2") then
+        new_timer = 6.5
+    end
+
+    orig_create_time_event(ev_id, act_id, new_timer, f, ...)
 end
