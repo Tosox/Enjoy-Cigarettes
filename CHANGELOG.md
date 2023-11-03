@@ -16,10 +16,10 @@
 * Optimized code
 
 ### v1.0.4
-* Fixed potential FPS issue
+* Fixed a potential FPS issue
 
 ### v1.0.5
-* Fixed a potential busy hands bug
+* Fixed a rare busy hands bug
 * Fixed a potential CTD
 * Improved compatability with other addons (Thanks NLTP_ASHES)
 * Optimized code
