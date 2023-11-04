@@ -21,5 +21,5 @@
 ### v1.0.5
 * Fixed a rare busy hands bug
 * Fixed a potential CTD
-* Improved compatability with other addons (Thanks NLTP_ASHES)
+* Improved compatibility with other addons (Thanks NLTP_ASHES)
 * Optimized code
