@@ -26,7 +26,7 @@ function enjoy_cigarette(obj, bag, mode)
 
     -- Go through the item manager 'actor_on_item_before_use' function
     local flags = { ret_value = false }
-	aaa_tsx_enjoy_cigs_quickslot.orig_itms_manager_aoibu(obj, flags)
+	a_tsx_enjoy_cigs_quickslot.orig_itms_manager_aoibu(obj, flags)
 	if not flags.ret_value then
 		return
 	end
@@ -50,6 +50,12 @@ function enjoy_cigarette(obj, bag, mode)
         local inv_fake_item = db.actor:object(fake_item)
         enhanced_animations.use_item(inv_fake_item)
 
+        return true
+    end)
+
+    local delay = ini_eff:r_float_ex(fake_item, "tm") * 0.001
+    CreateTimeEvent("restore_cig_anim", "restore_cig_anim", delay, function()
+        is_enjoying = false
         return true
     end)
 end
