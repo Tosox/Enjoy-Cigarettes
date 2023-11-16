@@ -54,7 +54,7 @@ function enjoy_cigarette(obj, bag, mode)
     end)
 
     local delay = ini_eff:r_float_ex(fake_item, "tm") * 0.001
-    CreateTimeEvent("restore_cig_anim", "restore_cig_anim", delay, function()
+    CreateTimeEvent("enjoy_cigs", "restore_cig_anim", delay, function()
         is_enjoying = false
         return true
     end)
