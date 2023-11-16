@@ -34,7 +34,6 @@ function enjoy_cigarette(obj, bag, mode)
     -- Hide inventory to hide the spawned fake item
     hide_hud_inventory()
 
-    -- Will be set to 'false' in zzzz_tsx_enjoy_cigs_patches
     is_enjoying = true
 
     -- Create fake object
