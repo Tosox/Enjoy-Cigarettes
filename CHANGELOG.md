@@ -23,3 +23,8 @@
 * Fixed a potential CTD
 * Improved compatibility with other addons (Thanks NLTP_ASHES)
 * Optimized code
+
+### v1.0.6
+* Removed EFP/GAMMA patch
+* Fixed lighter lights for GAMMA
+* Fixed addon for EFP
