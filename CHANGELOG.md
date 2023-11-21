@@ -25,6 +25,7 @@
 * Optimized code
 
 ### v1.0.6
+* Compatability for Western Goods
 * Removed EFP/GAMMA patch
 * Fixed lighter lights for GAMMA
 * Fixed addon for EFP
