@@ -15,6 +15,11 @@ function zzz_ea_addon_backpack.backpack_close()
     end
 end
 
+if western_goods_ui_lighter then
+    western_goods_ui_lighter.itms_manager_actor_on_item_before_use = a_tsx_enjoy_cigs_quickslot.orig_itms_manager_aoibu
+    a_tsx_enjoy_cigs_quickslot.orig_itms_manager_aoibu = western_goods_ui_lighter.use_cigarette
+end
+
 --[[
 For some reason this isn't working with the GAMMA modpack.
 
