@@ -61,6 +61,8 @@ enhanced_animations.anim_prepare = function()
 		if ini_eff:r_string_ex(alt_item, "snd") then
 			enhanced_animations.used_item = alt_item
 			enhanced_animations.anim_section = ini_eff:r_string_ex(alt_item, "anm")
+		else
+			enjoy_next = false
 		end
 	end
 	
