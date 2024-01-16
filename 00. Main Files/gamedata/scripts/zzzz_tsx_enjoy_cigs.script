@@ -1,0 +1,115 @@
+local ini_eff = ini_file("items\\items\\animations_settings.ltx")
+local cigs_ini = ini_file("items\\settings\\enjoy_cigs_cfg.ltx")
+
+local quickslot_bind = nil
+local modifier = nil
+
+local enjoy_next = false
+
+function is_cigarette(obj_name)
+    return cigs_ini:r_bool_ex("cigs", obj_name)
+end
+
+function has_asnens_long_anim()
+    return ini_eff:r_string_ex("cigar1_alt", "cam") == "itemuse_anm_effects\\cig_pack_asnen_long.anm"
+end
+
+function is_valid_cigarette(obj, bag, mode)
+    return is_cigarette(obj:section()) and (mode == "inventory") and (bag == "actor_bag")
+end
+
+function get_functor_name(obj, bag, mode)
+    return "st_enjoy_cigs"
+end
+
+function enjoy_cigarette(obj, bag, mode)
+	enjoy_next = true
+    ui_inventory.GUI:Action_Use(obj, bag)
+end
+
+local orig_anim_prepare = enhanced_animations.anim_prepare
+enhanced_animations.anim_prepare = function()
+	if (ui_mcm) and (quickslot_bind) and (is_cigarette(enhanced_animations.used_item)) and (not enjoy_next) then
+		-- Iterate quickslots
+		for i = 0, 3 do
+			local itm = get_console_cmd(0, strformat("slot_%s", i))
+			-- Check if used item is in quickslot
+			if itm == enhanced_animations.used_item then
+				local hud = GetActorMenu()
+				if (hud) and (not hud:IsShown()) then
+					if ui_mcm.get_mod_key(modifier) then
+						enjoy_next = true
+					end
+				end
+			end
+		end
+	end
+
+	if enjoy_next then
+		-- Check if animation for the item exists as alt variant
+		local alt_item = enhanced_animations.used_item .. "_alt"
+		if ini_eff:r_string_ex(alt_item, "snd") then
+			enhanced_animations.used_item = alt_item
+			enhanced_animations.anim_section = ini_eff:r_string_ex(alt_item, "anm")
+		end
+	end
+	
+	orig_anim_prepare()
+end
+
+local orig_stop_item_anim = enhanced_animations.stop_my_item_anim
+enhanced_animations.stop_my_item_anim = function()
+	-- Reset enjoy_next indicator
+	enjoy_next = false
+	return orig_stop_item_anim()
+end
+
+local orig_ciga_start = ciga_effects.ciga_start
+ciga_effects.ciga_start = function(used_item)
+    if enjoy_next then
+        -- Use different lighter light times
+        orig_ciga_effects.ciga_start(used_item)
+        return
+    end
+    orig_ciga_start(used_item)
+end
+
+--[[
+For some reason this isn't working with the GAMMA modpack.
+
+""
+It works for Vanilla, my own 250 addons modpack and EFT but not for GAMMA. For some reason the ea_cig_light and ea_cig_light2 events aren't going through this patch there.
+I am quite sure it's because of the load order (at least I thought so). I have this patch in a file called 'zzzz_tsx_enjoy_cigs_patches.script'.
+In EFT, when I change the file name and load the patch before the optimized_time_events.script I also have the same issue there like in GAMMA.
+Loading it after that, everything is fine in EFT. But not in GAMMA. I tried naming the file 'a_tsx...', 'f_tsx...', 'zzzzzzz_tsx...', but nothing works.
+I also tried removing the optimized_time_events.script file from the GAMMA modpack but for some reason even this didn't work.
+""
+
+local orig_create_time_event = _G.CreateTimeEvent
+_G.CreateTimeEvent = function(ev_id, act_id, timer, f, ...)
+    if (not enjoy_next) or (has_asnens_long_anim()) then
+        orig_create_time_event(ev_id, act_id, timer, f, ...)
+        return
+    end
+
+    if (ev_id == "ea_cig_light") and (act_id == "ea_cig_light") then
+        timer = 6
+    elseif (ev_id == "ea_cig_light2") and (act_id == "ea_cig_light2") then
+        timer = 6.5
+    end
+
+    orig_create_time_event(ev_id, act_id, timer, f, ...)
+end
+]]
+
+function on_option_change()
+    quickslot_bind = tsx_enjoy_cigs_mcm.get_config("quickslot_bind")
+    modifier = tsx_enjoy_cigs_mcm.get_config("modifier")
+end
+
+function on_game_start()
+    custom_functor_autoinject.add_functor("enjoy_cigs", is_valid_cigarette, get_functor_name, nil, enjoy_cigarette, true)
+	RegisterScriptCallback("on_option_change", on_option_change)
+    on_option_change()
+end
+
