@@ -1,3 +1,14 @@
+--[[
+    =====================================================================
+    Addon        : Enjoy Cigarettes
+    Link         : https://www.moddb.com/mods/stalker-anomaly/addons/dltx-enjoy-cigarettes
+    Author       : Tosox
+    Credits      : N/A
+	Date         : 22.04.2023
+    Last Edit    : 16.01.2024
+    =====================================================================
+--]]
+
 local defaults = {
     ["quickslot_bind"] = true,
     ["modifier"] = 1
@@ -10,9 +21,9 @@ end
 function on_mcm_load()
     return {
         id = "enjoy_cigs", sh = true, gr = {
-            { id = "title", type = "slide", link = "ui_options_slider_mask", text = "ui_mcm_enjoy_cigs_title", size = { 512, 50 }, spacing = 20 },
-            { id = "quickslot_bind", type = "check", val = 1, def = true },
-            { id = "modifier", type = ui_mcm.kb_mod_radio, val = 2, def = 1,
+            { id = "title", type = "slide", link = "ui_options_slider_alife", text = "ui_mcm_enjoy_cigs_title", size = { 512, 50 }, spacing = 20 },
+            { id = "quickslot_bind", type = "check", val = 1, def = defaults["quickslot_bind"] },
+            { id = "modifier", type = ui_mcm.kb_mod_radio, val = 2, def = defaults["modifier"],
                 content = {
                     { 0, "kb_mod_none" },
                     { 1, "kb_mod_shift" },
