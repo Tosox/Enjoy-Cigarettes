@@ -29,3 +29,7 @@
 * Removed EFP/GAMMA patch
 * Fixed lighter lights for GAMMA
 * Fixed addon for EFP
+
+### v1.1.0
+* Greatly improved code quality
+* Improved compatibility with other addons

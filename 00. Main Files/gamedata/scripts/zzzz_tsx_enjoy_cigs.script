@@ -1,0 +1,137 @@
+--[[
+    =====================================================================
+    Addon        : Enjoy Cigarettes
+    Link         : https://www.moddb.com/mods/stalker-anomaly/addons/dltx-enjoy-cigarettes
+    Author       : Tosox
+    Credits      : N/A
+	Date         : 22.04.2023
+    Last Edit    : 16.01.2024
+    =====================================================================
+--]]
+
+local ini_eff = ini_file("items\\items\\animations_settings.ltx")
+local cigs_ini = ini_file("items\\settings\\enjoy_cigs_cfg.ltx")
+
+local quickslot_bind = nil
+local modifier = nil
+
+local enjoy_next = false
+
+--===========================================================================
+--
+-- Util functions
+--
+--===========================================================================
+
+function is_cigarette(obj_name)
+    return cigs_ini:r_bool_ex("cigs", obj_name)
+end
+
+function has_asnens_long_anim()
+    return ini_eff:r_string_ex("cigar1_alt", "cam") == "itemuse_anm_effects\\cig_pack_asnen_long.anm"
+end
+
+--===========================================================================
+--
+-- Patch 'enhanced_animations' to dynamically change the animation
+--
+--===========================================================================
+
+local orig_anim_prepare = enhanced_animations.anim_prepare
+enhanced_animations.anim_prepare = function()
+	if (ui_mcm) and (quickslot_bind) and (is_cigarette(enhanced_animations.used_item)) and (not enjoy_next) then
+		-- Iterate quickslots
+		for i = 0, 3 do
+			local itm = get_console_cmd(0, strformat("slot_%s", i))
+			-- Check if used item is in quickslot
+			if itm == enhanced_animations.used_item then
+				local hud = GetActorMenu()
+				if (hud) and (not hud:IsShown()) then
+					if ui_mcm.get_mod_key(modifier) then
+						enjoy_next = true
+					end
+				end
+			end
+		end
+	end
+
+	if enjoy_next then
+		-- Check if animation for the item exists as alt variant
+		local alt_item = enhanced_animations.used_item .. "_alt"
+		if ini_eff:r_string_ex(alt_item, "snd") then
+			enhanced_animations.used_item = alt_item
+			enhanced_animations.anim_section = ini_eff:r_string_ex(alt_item, "anm")
+		else
+			enjoy_next = false
+		end
+	end
+	
+	orig_anim_prepare()
+end
+
+local orig_stop_item_anim = enhanced_animations.stop_my_item_anim
+enhanced_animations.stop_my_item_anim = function()
+	-- Reset enjoy_next indicator
+	enjoy_next = false
+	return orig_stop_item_anim()
+end
+
+--===========================================================================
+--
+-- Patch 'CreateTimeEvent' to dynamically change the lighter sparks times
+--
+--===========================================================================
+
+function patched_create_time_event(orig_func, ev_id, act_id, timer, f, ...)
+	if (not enjoy_next) or (has_asnens_long_anim()) then
+        orig_func(ev_id, act_id, timer, f, ...)
+        return
+    end
+
+    if (ev_id == "ea_cig_light") and (act_id == "ea_cig_light") then
+        timer = 6
+    elseif (ev_id == "ea_cig_light2") and (act_id == "ea_cig_light2") then
+        timer = 6.5
+    end
+
+    orig_func(ev_id, act_id, timer, f, ...)
+end
+
+local orig_create_time_event = _G.CreateTimeEvent
+_G.CreateTimeEvent = function(ev_id, act_id, timer, f, ...)
+    patched_create_time_event(orig_create_time_event, ev_id, act_id, timer, f, ...)
+end
+
+local orig_demonized_create_time_event = nil
+if demonized_time_events then
+	orig_demonized_create_time_event = demonized_time_events.CreateTimeEvent
+	demonized_time_events.CreateTimeEvent = function(ev_id, act_id, timer, f, ...)
+		patched_create_time_event(orig_demonized_create_time_event, ev_id, act_id, timer, f, ...)
+	end
+end
+
+--===========================================================================
+
+function is_valid_cigarette(obj, bag, mode)
+    return is_cigarette(obj:section()) and (mode == "inventory") and (bag == "actor_bag")
+end
+
+function get_functor_name(obj, bag, mode)
+    return "st_enjoy_cigs"
+end
+
+function enjoy_cigarette(obj, bag, mode)
+	enjoy_next = true
+    ui_inventory.GUI:Action_Use(obj, bag)
+end
+
+function on_option_change()
+    quickslot_bind = tsx_enjoy_cigs_mcm.get_config("quickslot_bind")
+    modifier = tsx_enjoy_cigs_mcm.get_config("modifier")
+end
+
+function on_game_start()
+    custom_functor_autoinject.add_functor("enjoy_cigs", is_valid_cigarette, get_functor_name, nil, enjoy_cigarette, true)
+	RegisterScriptCallback("on_option_change", on_option_change)
+    on_option_change()
+end

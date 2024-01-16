@@ -22,4 +22,4 @@ This addon makes it possible to play the longer, original [FDDA](https://www.mod
 
 <br/>
 
-[<img src="readme-res/yt-thumbnail.jpg" alt="vid_preview" width="700"/>](https://www.youtube.com/watch?v=UFCezDngGcs)
+[![](https://ytcards.demolab.com/?id=UFCezDngGcs&title=Enjoy+Cigarettes+Demo&lang=en&timestamp=1677625200&background_color=%230d1117&title_color=%23ffffff&stats_color=%23dedede&max_title_lines=1&width=700&border_radius=5 "Enjoy Cigarettes Demo")](https://www.youtube.com/watch?v=UFCezDngGcs)
