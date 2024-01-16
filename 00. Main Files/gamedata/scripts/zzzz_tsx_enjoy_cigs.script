@@ -1,3 +1,14 @@
+--[[
+    =====================================================================
+    Addon        : Enjoy Cigarettes
+    Link         : https://www.moddb.com/mods/stalker-anomaly/addons/dltx-enjoy-cigarettes
+    Author       : Tosox
+    Credits      : N/A
+	Date         : 22.04.2023
+    Last Edit    : 16.01.2024
+    =====================================================================
+--]]
+
 local ini_eff = ini_file("items\\items\\animations_settings.ltx")
 local cigs_ini = ini_file("items\\settings\\enjoy_cigs_cfg.ltx")
 
@@ -5,6 +16,12 @@ local quickslot_bind = nil
 local modifier = nil
 
 local enjoy_next = false
+
+--===========================================================================
+--
+-- Util functions
+--
+--===========================================================================
 
 function is_cigarette(obj_name)
     return cigs_ini:r_bool_ex("cigs", obj_name)
@@ -14,18 +31,11 @@ function has_asnens_long_anim()
     return ini_eff:r_string_ex("cigar1_alt", "cam") == "itemuse_anm_effects\\cig_pack_asnen_long.anm"
 end
 
-function is_valid_cigarette(obj, bag, mode)
-    return is_cigarette(obj:section()) and (mode == "inventory") and (bag == "actor_bag")
-end
-
-function get_functor_name(obj, bag, mode)
-    return "st_enjoy_cigs"
-end
-
-function enjoy_cigarette(obj, bag, mode)
-	enjoy_next = true
-    ui_inventory.GUI:Action_Use(obj, bag)
-end
+--===========================================================================
+--
+-- Patch 'enhanced_animations' to dynamically change the animation
+--
+--===========================================================================
 
 local orig_anim_prepare = enhanced_animations.anim_prepare
 enhanced_animations.anim_prepare = function()
@@ -64,31 +74,15 @@ enhanced_animations.stop_my_item_anim = function()
 	return orig_stop_item_anim()
 end
 
-local orig_ciga_start = ciga_effects.ciga_start
-ciga_effects.ciga_start = function(used_item)
-    if enjoy_next then
-        -- Use different lighter light times
-        orig_ciga_effects.ciga_start(used_item)
-        return
-    end
-    orig_ciga_start(used_item)
-end
+--===========================================================================
+--
+-- Patch 'CreateTimeEvent' to dynamically change the lighter sparks times
+--
+--===========================================================================
 
---[[
-For some reason this isn't working with the GAMMA modpack.
-
-""
-It works for Vanilla, my own 250 addons modpack and EFT but not for GAMMA. For some reason the ea_cig_light and ea_cig_light2 events aren't going through this patch there.
-I am quite sure it's because of the load order (at least I thought so). I have this patch in a file called 'zzzz_tsx_enjoy_cigs_patches.script'.
-In EFT, when I change the file name and load the patch before the optimized_time_events.script I also have the same issue there like in GAMMA.
-Loading it after that, everything is fine in EFT. But not in GAMMA. I tried naming the file 'a_tsx...', 'f_tsx...', 'zzzzzzz_tsx...', but nothing works.
-I also tried removing the optimized_time_events.script file from the GAMMA modpack but for some reason even this didn't work.
-""
-
-local orig_create_time_event = _G.CreateTimeEvent
-_G.CreateTimeEvent = function(ev_id, act_id, timer, f, ...)
-    if (not enjoy_next) or (has_asnens_long_anim()) then
-        orig_create_time_event(ev_id, act_id, timer, f, ...)
+function patched_create_time_event(orig_func, ev_id, act_id, timer, f, ...)
+	if (not enjoy_next) or (has_asnens_long_anim()) then
+        orig_func(ev_id, act_id, timer, f, ...)
         return
     end
 
@@ -98,9 +92,36 @@ _G.CreateTimeEvent = function(ev_id, act_id, timer, f, ...)
         timer = 6.5
     end
 
-    orig_create_time_event(ev_id, act_id, timer, f, ...)
+    orig_func(ev_id, act_id, timer, f, ...)
 end
-]]
+
+local orig_create_time_event = _G.CreateTimeEvent
+_G.CreateTimeEvent = function(ev_id, act_id, timer, f, ...)
+    patched_create_time_event(orig_create_time_event, ev_id, act_id, timer, f, ...)
+end
+
+local orig_demonized_create_time_event = nil
+if demonized_time_events then
+	orig_demonized_create_time_event = demonized_time_events.CreateTimeEvent
+	demonized_time_events.CreateTimeEvent = function(ev_id, act_id, timer, f, ...)
+		patched_create_time_event(orig_demonized_create_time_event, ev_id, act_id, timer, f, ...)
+	end
+end
+
+--===========================================================================
+
+function is_valid_cigarette(obj, bag, mode)
+    return is_cigarette(obj:section()) and (mode == "inventory") and (bag == "actor_bag")
+end
+
+function get_functor_name(obj, bag, mode)
+    return "st_enjoy_cigs"
+end
+
+function enjoy_cigarette(obj, bag, mode)
+	enjoy_next = true
+    ui_inventory.GUI:Action_Use(obj, bag)
+end
 
 function on_option_change()
     quickslot_bind = tsx_enjoy_cigs_mcm.get_config("quickslot_bind")
@@ -112,4 +133,3 @@ function on_game_start()
 	RegisterScriptCallback("on_option_change", on_option_change)
     on_option_change()
 end
-
