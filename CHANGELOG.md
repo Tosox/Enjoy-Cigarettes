@@ -33,3 +33,6 @@
 ### v1.1.0
 * Greatly improved code quality
 * Improved compatibility with other addons
+
+### v1.1.1
+* Fixed the player freezing when trying to skin a mutant (Thanks lizzardman)

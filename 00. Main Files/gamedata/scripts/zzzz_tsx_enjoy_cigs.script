@@ -24,7 +24,7 @@ local enjoy_next = false
 --===========================================================================
 
 function is_cigarette(obj_name)
-    return cigs_ini:r_bool_ex("cigs", obj_name)
+    return obj_name and cigs_ini:r_bool_ex("cigs", obj_name) and true or false
 end
 
 function has_asnens_long_anim()
