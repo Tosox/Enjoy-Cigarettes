@@ -9,19 +9,15 @@
 --]]
 
 local ini_eff = ini_file("items\\items\\animations_settings.ltx")
-local cigs_ini = ini_file("items\\settings\\enjoy_cigs_cfg.ltx")
 
 local quickslot_bind = nil
 local modifier = nil
--- Animation choice for the right-click "enjoy" option: "default" or "asnen"
+
 local enjoy_anim = "default"
--- Animation choice for normal smoking: "unchanged", "default" or "asnen"
 local normal_anim = "unchanged"
--- Whether the invert option is enabled (changes the context menu wording)
 local inverted = false
 
 local enjoy_next = false
--- Whether the long (cig_pack) animation is playing, so the lighter sparks get retimed
 local retime_lighter = false
 
 --===========================================================================
@@ -31,45 +27,51 @@ local retime_lighter = false
 --===========================================================================
 
 function is_cigarette(obj_name)
-    return obj_name and cigs_ini:r_bool_ex("cigs", obj_name) and true or false
+    return obj_name
+        and ini_eff:r_bool_ex(obj_name, "smoke")
+        and ini_eff:section_exist(obj_name .. "_alt") or false
 end
 
--- Returns the dedicated HUD section base shipped by this addon for a given item
--- and style ("orig" or "asnen"). Returns nil when no dedicated HUD exists
--- (e.g. FDDA Enhanced smokeables), in which case the item's own HUD is reused.
-function get_enjoy_hud(base_item, style)
-    local sysini = system_ini()
-    local section = strformat("item_ea_%s_%s_hud", base_item, style)
-    if sysini:section_exist(section) then
-        return strformat("item_ea_%s_%s", base_item, style)
+function is_quickslot_enjoy(section)
+    if not (ui_mcm and quickslot_bind) then return false end
+
+    local hud = GetActorMenu()
+    if not (hud and (not hud:IsShown()) and ui_mcm.get_mod_key(modifier)) then return false end
+
+    for i = 0, 3 do
+        if get_console_cmd(0, strformat("slot_%s", i)) == section then
+            return true
+        end
     end
-    -- Asnen requested but this item has no Asnen HUD: fall back to the default one
-    if (style == "asnen") and sysini:section_exist(strformat("item_ea_%s_orig_hud", base_item)) then
-        return strformat("item_ea_%s_orig", base_item)
-    end
-    return nil
+
+    return false
 end
 
--- Swaps enhanced_animations onto the requested enjoy animation for a cigarette.
--- choice: "default" (long FDDA) or "asnen" (alternative). Returns true on success.
-function apply_enjoy_anim(base_item, choice)
+function pick_suffix(base_item, is_enjoy)
+    local choice = is_enjoy and enjoy_anim or normal_anim
+    if choice == "unchanged" then return nil end
+
     -- Prefer the Asnen variant when requested and available for this item
     local suffix = "_alt"
     if (choice == "asnen") and ini_eff:section_exist(base_item .. "_altlong") then
         suffix = "_altlong"
     end
-    local alt_item = base_item .. suffix
-
-    if not ini_eff:r_string_ex(alt_item, "snd") then
-        return false
+    if ini_eff:r_string_ex(base_item .. suffix, "snd") then
+        return suffix
     end
 
-    local base_anm = enhanced_animations.anim_section
+    return nil
+end
+
+function apply_enjoy_anim(base_item, is_enjoy)
+    local suffix = pick_suffix(base_item, is_enjoy)
+    if not suffix then return false end
+
+    local alt_item = base_item .. suffix
     enhanced_animations.used_item = alt_item
+    enhanced_animations.anim_section = ini_eff:r_string_ex(alt_item, "anm")
     retime_lighter = (suffix == "_alt")
-    -- Use our dedicated HUD when we ship one, otherwise reuse the item's own HUD
-    local style = (suffix == "_altlong") and "asnen" or "orig"
-    enhanced_animations.anim_section = get_enjoy_hud(base_item, style) or base_anm
+
     return true
 end
 
@@ -81,34 +83,18 @@ end
 
 local orig_anim_prepare = enhanced_animations.anim_prepare
 enhanced_animations.anim_prepare = function()
-	-- base item as set by enhanced_animations.use_item
 	local base_item = enhanced_animations.used_item
 	local is_cig = is_cigarette(base_item)
 
 	-- Quickslot + modifier key triggers the "enjoy" action without the right-click menu
-	if (ui_mcm) and (quickslot_bind) and (is_cig) and (not enjoy_next) then
-		local hud = GetActorMenu()
-		if (hud) and (not hud:IsShown()) and (ui_mcm.get_mod_key(modifier)) then
-			-- Check if the used item is in a quickslot
-			for i = 0, 3 do
-				if get_console_cmd(0, strformat("slot_%s", i)) == base_item then
-					enjoy_next = true
-					break
-				end
-			end
-		end
+	if is_cig and not enjoy_next and is_quickslot_enjoy(base_item) then
+		enjoy_next = true
 	end
 
-	if is_cig then
-		-- The right-click/quickslot "enjoy" uses its own animation choice,
-		-- normal smoking uses the (optional) normal animation choice.
-		local choice = enjoy_next and enjoy_anim or normal_anim
-
-		if (choice ~= "unchanged") and (not apply_enjoy_anim(base_item, choice)) then
-			-- No alt animation for this item: fall back to the vanilla behaviour
-			enjoy_next = false
-			retime_lighter = false
-		end
+	if is_cig and not apply_enjoy_anim(base_item, enjoy_next) then
+		-- No alt animation for this item: fall back to the vanilla behaviour
+		enjoy_next = false
+		retime_lighter = false
 	end
 
 	orig_anim_prepare()
@@ -116,7 +102,6 @@ end
 
 local orig_stop_item_anim = enhanced_animations.stop_my_item_anim
 enhanced_animations.stop_my_item_anim = function()
-	-- Reset state indicators
 	enjoy_next = false
 	retime_lighter = false
 	return orig_stop_item_anim()
@@ -129,7 +114,6 @@ end
 --===========================================================================
 
 function patched_create_time_event(orig_func, ev_id, act_id, timer, f, ...)
-	-- Only retime the lighter sparks while the long (cig_pack) animation is playing
 	if (not retime_lighter) then
         orig_func(ev_id, act_id, timer, f, ...)
         return
@@ -164,7 +148,6 @@ function is_valid_cigarette(obj, bag, mode)
 end
 
 function get_functor_name(obj, bag, mode)
-    -- When inverted, this option plays the alternate (quick) animation instead
     return inverted and "st_enjoy_cigs_quick" or "st_enjoy_cigs"
 end
 
@@ -177,17 +160,13 @@ function on_option_change()
     quickslot_bind = tsx_enjoy_cigs_mcm.get_config("quickslot_bind")
     modifier = tsx_enjoy_cigs_mcm.get_config("modifier")
 
-    -- The animation this addon plays
-    local picked = (tsx_enjoy_cigs_mcm.get_config("animation") == 2) and "asnen" or "default"
+    local picked = (tsx_enjoy_cigs_mcm.get_config("animation") == 1) and "asnen" or "default"
 
     inverted = tsx_enjoy_cigs_mcm.get_config("invert") and true or false
     if inverted then
-        -- Inverted: the picked animation plays during normal smoking, while the
-        -- right-click option plays the vanilla animation normal smoking would use
         normal_anim = picked
         enjoy_anim = "unchanged"
     else
-        -- Default: normal smoking is untouched, the right-click option plays the picked animation
         normal_anim = "unchanged"
         enjoy_anim = picked
     end

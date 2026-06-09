@@ -9,10 +9,10 @@
 --]]
 
 local defaults = {
-    ["quickslot_bind"] = true,
-    ["modifier"] = 1,
     ["animation"] = 1,
-    ["invert"] = false
+    ["invert"] = false,
+    ["quickslot_bind"] = true,
+    ["modifier"] = 1
 }
 
 function get_config(key)
@@ -25,13 +25,13 @@ function on_mcm_load()
             { id = "title", type = "slide", link = "ui_options_slider_alife", text = "ui_mcm_enjoy_cigs_title", size = { 512, 50 }, spacing = 20 },
             { id = "animation", type = "list", val = 2, def = defaults["animation"],
                 content = {
-                    { 1, "anim_default" },
-                    { 2, "anim_asnen" }
+                    { 0, "anim_default" },
+                    { 1, "anim_asnen" }
                 }
             },
             { id = "invert", type = "check", val = 1, def = defaults["invert"] },
             { id = "quickslot_bind", type = "check", val = 1, def = defaults["quickslot_bind"] },
-            { id = "modifier", type = ui_mcm.kb_mod_radio, val = 2, def = defaults["modifier"],
+            { id = "modifier", type = "list", val = 2, def = defaults["modifier"],
                 content = {
                     { 0, "kb_mod_none" },
                     { 1, "kb_mod_shift" },
