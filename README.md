@@ -13,6 +13,7 @@ This addon makes it possible to play the longer, original [FDDA](https://www.mod
 * Make sure that [FDDA](https://www.moddb.com/mods/stalker-anomaly/addons/food-drug-and-drinks-animations-reuploaded), [Asnen's Better Cigarettes Animation](https://www.moddb.com/mods/stalker-anomaly/addons/asnen-and-grok-better-cigarettes-animation) and the [Modded Exes](https://github.com/themrdemonized/xray-monolith) are installed
 * Download the [latest release](https://www.moddb.com/mods/stalker-anomaly/addons/dltx-enjoy-cigarettes)
 * Install the mod preferably with [Mod Organizer](https://github.com/ModOrganizer2/modorganizer/releases/)
+* Optionally install [Item's Model Drop After Usage](https://www.moddb.com/mods/stalker-anomaly/addons/items-model-drop-after-usage) to leave a cigarette butt on the ground after smoking
 * Open the game and enjoy
 
 ## Preview
