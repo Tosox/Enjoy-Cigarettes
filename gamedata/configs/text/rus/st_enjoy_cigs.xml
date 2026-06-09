@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<string_table>
+	<string id="st_enjoy_cigs">
+		<text>наслаждать сигарета</text>
+	</string>
+	<string id="st_enjoy_cigs_quick">
+		<text>быстро покурить</text>
+	</string>
+</string_table>

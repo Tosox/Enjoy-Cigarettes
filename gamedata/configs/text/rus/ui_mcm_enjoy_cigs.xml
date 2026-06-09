@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<string_table>
+	<string id="ui_mcm_menu_enjoy_cigs">
+		<text>Enjoy Cigarettes</text>
+	</string>
+	<string id="ui_mcm_enjoy_cigs_title">
+		<text>Enjoy Cigarettes</text>
+	</string>
+	<string id="ui_mcm_enjoy_cigs_quickslot_bind">
+		<text>Включить клавиша модификатора для быстрых слотах</text>
+	</string>
+	<string id="ui_mcm_enjoy_cigs_quickslot_bind_desc">
+		<text>Включить наслаждаться сигареты для сигареты в быстрых слотах нажав клавишу модификатора вместе с клавишей якоря квикслота</text>
+	</string>
+	<string id="ui_mcm_enjoy_cigs_modifier">
+		<text>Клавиша модификатора</text>
+	</string>
+	
+	<string id="ui_mcm_lst_kb_mod_none">
+		<text>Без модификатора</text>
+	</string>
+	<string id="ui_mcm_lst_kb_mod_ctrl">
+		<text>Ctrl</text>
+	</string>
+	<string id="ui_mcm_lst_kb_mod_shift">
+		<text>Shift</text>
+	</string>
+	<string id="ui_mcm_lst_kb_mod_alt">
+		<text>Alt</text>
+	</string>
+	<string id="ui_mcm_enjoy_cigs_animation">
+		<text>Анимация сигарет</text>
+	</string>
+	<string id="ui_mcm_enjoy_cigs_animation_desc">
+		<text>Какую длинную анимацию проигрывает этот аддон. «Default» — оригинальная анимация сигарет из FDDA. «Alternative» — более длинная альтернативная анимация от Asnen.</text>
+	</string>
+	<string id="ui_mcm_enjoy_cigs_invert">
+		<text>Наслаждаться по умолчанию</text>
+	</string>
+	<string id="ui_mcm_enjoy_cigs_invert_desc">
+		<text>Обычно вы курите быстро, а опция «насладиться сигаретой» проигрывает длинную анимацию. Включите это, чтобы поменять их местами: длинная анимация играет при каждом курении, а опция в меню становится быстрым перекуром.</text>
+	</string>
+	<string id="ui_mcm_lst_anim_default">
+		<text>Обычная</text>
+	</string>
+	<string id="ui_mcm_lst_anim_asnen">
+		<text>Альтернативная</text>
+	</string>
+</string_table>

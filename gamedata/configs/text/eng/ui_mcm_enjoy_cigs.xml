@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<string_table>
+	<string id="ui_mcm_menu_enjoy_cigs">
+		<text>Enjoy Cigarettes</text>
+	</string>
+	<string id="ui_mcm_enjoy_cigs_title">
+		<text>Enjoy Cigarettes</text>
+	</string>
+	<string id="ui_mcm_enjoy_cigs_quickslot_bind">
+		<text>Enable quickslot modifier key</text>
+	</string>
+	<string id="ui_mcm_enjoy_cigs_quickslot_bind_desc">
+		<text>Enable enjoying cigarettes for cigarettes in quickslots when pressing the modifier key along with the quickslot bind key</text>
+	</string>
+	<string id="ui_mcm_enjoy_cigs_modifier">
+		<text>Modifier key</text>
+	</string>
+	<string id="ui_mcm_enjoy_cigs_animation">
+		<text>Cigarette animation</text>
+	</string>
+	<string id="ui_mcm_enjoy_cigs_animation_desc">
+		<text>Which long animation this addon plays. "Default" is FDDA's original cigarette animation. "Alternative" is the longer alternative animation by Asnen.</text>
+	</string>
+	<string id="ui_mcm_enjoy_cigs_invert">
+		<text>Enjoy by default</text>
+	</string>
+	<string id="ui_mcm_enjoy_cigs_invert_desc">
+		<text>Normally you smoke quickly and the "enjoy cigarette" option plays the long animation. Enable this to swap them: the long animation plays every time you smoke, and the right-click option becomes a quick smoke instead.</text>
+	</string>
+	<string id="ui_mcm_lst_anim_default">
+		<text>Default</text>
+	</string>
+	<string id="ui_mcm_lst_anim_asnen">
+		<text>Alternative</text>
+	</string>
+
+	<string id="ui_mcm_lst_kb_mod_none">
+		<text>No modifier</text>
+	</string>
+	<string id="ui_mcm_lst_kb_mod_ctrl">
+		<text>Ctrl</text>
+	</string>
+	<string id="ui_mcm_lst_kb_mod_shift">
+		<text>Shift</text>
+	</string>
+	<string id="ui_mcm_lst_kb_mod_alt">
+		<text>Alt</text>
+	</string>
+</string_table>
