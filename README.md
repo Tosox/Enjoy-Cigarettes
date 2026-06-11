@@ -1,6 +1,9 @@
 # Enjoy Cigarettes
 
-> *IMPORTANT*: It is not my intention to encourage people to smoke. I personally advise against cigarettes and the like!
+[![Total Downloads](https://img.shields.io/github/downloads/Tosox/Enjoy-Cigarettes/total.svg?label=Downloads%20(All%20Time))](https://github.com/Tosox/Enjoy-Cigarettes/releases) [![Latest Release Downloads](https://img.shields.io/github/downloads/Tosox/Enjoy-Cigarettes/latest/total.svg?label=Downloads%20(Latest%20Release))](https://github.com/Tosox/Enjoy-Cigarettes/releases/latest)
+
+> [!NOTE]
+> It is not my intention to encourage people to smoke. I personally advise against cigarettes and the like!
 
 ## 📜 Description
 
