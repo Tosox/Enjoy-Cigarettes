@@ -1,9 +1,10 @@
 # Changelog
 
-## v1.2.0
+## v2.0.0
 * The alternative Asnen cigarette animation is now selectable in-game via MCM instead of a separate install option
 * Added an "Enjoy by default" MCM option that plays the long animation while smoking normally and the short one otherwise
 * Added support for smokeables by FDDA Enhanced Animations
+* Added support for FDDA Redone
 * Removed the FOMOD installer
 
 ## v1.1.1
