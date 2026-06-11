@@ -4,12 +4,12 @@
     Link         : https://www.moddb.com/mods/stalker-anomaly/addons/dltx-enjoy-cigarettes
     Author       : Tosox
 	Date         : 22.04.2023
-    Last Edit    : 09.06.2026
+    Last Edit    : 11.06.2026
     =====================================================================
 --]]
 
 local defaults = {
-    ["animation"] = 1,
+    ["animation"] = 0,
     ["invert"] = false,
     ["quickslot_bind"] = true,
     ["modifier"] = 1
