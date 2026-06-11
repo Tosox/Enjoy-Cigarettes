@@ -5,6 +5,7 @@
 * Added an "Enjoy by default" MCM option that plays the long animation while smoking normally and the short one otherwise
 * Added support for smokeables by FDDA Enhanced Animations
 * Added support for FDDA Redone
+* Made it easier to monkey-patch the function overrides
 * Removed the FOMOD installer
 
 ## v1.1.1
