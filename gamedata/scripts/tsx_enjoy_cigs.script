@@ -82,7 +82,7 @@ end
 --===========================================================================
 
 if enhanced_animations then
-    local orig_anim_prepare = enhanced_animations.anim_prepare
+    enhanced_animations_anim_prepare = enhanced_animations.anim_prepare
     enhanced_animations.anim_prepare = function()
         local base_item = enhanced_animations.used_item
         local is_cig = is_cigarette(base_item)
@@ -98,14 +98,14 @@ if enhanced_animations then
             retime_lighter = false
         end
 
-        orig_anim_prepare()
+        enhanced_animations_anim_prepare()
     end
 
-    local orig_stop_item_anim = enhanced_animations.stop_my_item_anim
+    enhanced_animations_stop_my_item_anim = enhanced_animations.stop_my_item_anim
     enhanced_animations.stop_my_item_anim = function()
         enjoy_next = false
         retime_lighter = false
-        return orig_stop_item_anim()
+        return enhanced_animations_stop_my_item_anim()
     end
 end
 
@@ -144,16 +144,15 @@ function patched_create_time_event(orig_func, ev_id, act_id, timer, f, ...)
     orig_func(ev_id, act_id, timer, f, ...)
 end
 
-local orig_create_time_event = _G.CreateTimeEvent
+_G_CreateTimeEvent = _G.CreateTimeEvent
 _G.CreateTimeEvent = function(ev_id, act_id, timer, f, ...)
-    patched_create_time_event(orig_create_time_event, ev_id, act_id, timer, f, ...)
+    patched_create_time_event(_G_CreateTimeEvent, ev_id, act_id, timer, f, ...)
 end
 
-local orig_demonized_create_time_event = nil
 if demonized_time_events then
-    orig_demonized_create_time_event = demonized_time_events.CreateTimeEvent
+    demonized_time_events_CreateTimeEvent = demonized_time_events.CreateTimeEvent
     demonized_time_events.CreateTimeEvent = function(ev_id, act_id, timer, f, ...)
-        patched_create_time_event(orig_demonized_create_time_event, ev_id, act_id, timer, f, ...)
+        patched_create_time_event(demonized_time_events_CreateTimeEvent, ev_id, act_id, timer, f, ...)
     end
 end
 
